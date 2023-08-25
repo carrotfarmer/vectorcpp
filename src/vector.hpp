@@ -50,7 +50,7 @@ public:
         m_size++;
     }
 
-    T operator[](size_t index)
+    T& operator[](size_t index) const
     {
         if (index > m_size) {
             throw std::out_of_range("ERR: index out of bounds!");
@@ -70,7 +70,7 @@ public:
         }
     }
 
-    T& at(size_t index)
+    T& at(size_t index) const
     {
         if (index > m_size) {
             throw std::out_of_range("ERR: index out of bounds!");
@@ -79,12 +79,12 @@ public:
         return m_data[index];
     }
 
-    size_t size()
+    size_t size() const
     {
         return m_size;
     }
 
-    size_t capacity()
+    size_t capacity() const
     {
         return m_capacity;
     }
