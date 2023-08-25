@@ -18,6 +18,19 @@ public:
         m_size = 0;
     }
 
+    // copy constructor to deep copy
+    Vector(Vector& other)
+    {
+        m_size = other.size();
+        m_capacity = other.capacity();
+        data = new T[m_capacity];
+
+        for (int i = 0; i < other.size(); i++) {
+            std::cout << other.data[i] << std::endl;
+            data[i] = other.data[i];
+        }
+    }
+
     void push_back(T element)
     {
         if (m_size >= m_capacity) {
