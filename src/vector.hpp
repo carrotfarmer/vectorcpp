@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <optional>
+#include <stdexcept>
+
 #include <stddef.h>
 
 template <typename T>
@@ -51,7 +53,7 @@ public:
     T operator[](size_t index)
     {
         if (index > m_size) {
-            std::cerr << "index out of bounds!" << std::endl;
+            throw std::out_of_range("ERR: index out of bounds!");
         }
 
         return m_data[index];
@@ -66,6 +68,15 @@ public:
         for (int i = 0; i < other.size(); i++) {
             m_data[i] = other.m_data[i];
         }
+    }
+
+    T& at(size_t index)
+    {
+        if (index > m_size) {
+            throw std::out_of_range("ERR: index out of bounds!");
+        }
+
+        return m_data[index];
     }
 
     size_t size()

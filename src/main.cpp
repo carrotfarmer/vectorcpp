@@ -41,5 +41,10 @@ int main()
     print_vec(vec3);
     print_vec(vec4);
 
+    std::cout << vec4.at(2) << std::endl;
+
+    // should error
+    std::cout << vec4.at(7) << std::endl;
+
     return 0;
 }
