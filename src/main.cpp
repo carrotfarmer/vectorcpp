@@ -41,6 +41,9 @@ int main()
     print_vec(vec3);
     print_vec(vec4);
 
+    vec4.pop_back();
+    print_vec(vec4);
+
     std::cout << vec4.at(2) << std::endl;
 
     // should error

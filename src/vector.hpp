@@ -50,6 +50,26 @@ public:
         m_size++;
     }
 
+    void pop_back()
+    {
+        if (m_size > 0) {
+            m_size--;
+
+            // dealloc if size is 1/4th of capacity
+            if (m_capacity > 4 * m_size) {
+                m_capacity = m_size;
+                T* newData = new T[m_capacity];
+
+                for (int i = 0; i < m_size; i++) {
+                    newData[i] = m_data[i];
+                }
+
+                delete m_data;
+                m_data = newData;
+            }
+        }
+    }
+
     T& operator[](size_t index) const
     {
         if (index > m_size) {
