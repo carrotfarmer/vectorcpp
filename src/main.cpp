@@ -5,11 +5,10 @@
 template <typename T>
 void print_vec(Vector<T>& vec)
 {
-    std::cout << "[";
-    for (int i = 0; i < vec.size(); i++) {
-        std::cout << vec[i] << ", ";
+    for (T elem : vec) {
+        std::cout << elem << " ";
     }
-    std::cout << "]" << std::endl;
+    std::cout << "" << std::endl;
 }
 
 int main()

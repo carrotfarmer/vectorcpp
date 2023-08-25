@@ -6,6 +6,8 @@
 
 #include <stddef.h>
 
+#include "./iter.hpp"
+
 template <typename T>
 class Vector {
 public:
@@ -97,6 +99,16 @@ public:
         }
 
         return m_data[index];
+    }
+
+    Iterator<T> begin()
+    {
+        return Iterator(m_data);
+    }
+
+    Iterator<T> end()
+    {
+        return Iterator(m_data + m_size);
     }
 
     size_t size() const
