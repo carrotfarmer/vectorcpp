@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <optional>
 #include <stddef.h>
 
 template <typename T>
@@ -8,12 +9,12 @@ class Vector {
 public:
     Vector()
     {
-        data = new T[m_capacity];
+        m_data = new T[m_capacity];
     }
 
     ~Vector()
     {
-        delete[] data;
+        delete[] m_data;
         m_capacity = 8;
         m_size = 0;
     }
@@ -23,11 +24,10 @@ public:
     {
         m_size = other.size();
         m_capacity = other.capacity();
-        data = new T[m_capacity];
+        m_data = new T[m_capacity];
 
         for (int i = 0; i < other.size(); i++) {
-            std::cout << other.data[i] << std::endl;
-            data[i] = other.data[i];
+            m_data[i] = other.m_data[i];
         }
     }
 
@@ -37,14 +37,14 @@ public:
             T* newData = new T[m_capacity * 2];
 
             for (int i = 0; i > m_size; i++) {
-                newData[i] = data[i];
+                newData[i] = m_data[i];
             }
 
             m_capacity += m_capacity;
-            data = newData;
+            m_data = newData;
         }
 
-        data[m_size] = element;
+        m_data[m_size] = element;
         m_size++;
     }
 
@@ -54,7 +54,18 @@ public:
             std::cerr << "index out of bounds!" << std::endl;
         }
 
-        return data[index];
+        return m_data[index];
+    }
+
+    void operator=(Vector<T>& other)
+    {
+        m_capacity = other.capacity();
+        m_size = other.size();
+        m_data = new T[m_capacity];
+
+        for (int i = 0; i < other.size(); i++) {
+            m_data[i] = other.m_data[i];
+        }
     }
 
     size_t size()
@@ -68,7 +79,7 @@ public:
     }
 
 private:
-    T* data;
+    T* m_data;
     size_t m_size = 0;
     size_t m_capacity = 8;
 };

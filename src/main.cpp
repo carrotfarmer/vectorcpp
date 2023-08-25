@@ -2,6 +2,16 @@
 
 #include "./vector.hpp"
 
+template <typename T>
+void print_vec(Vector<T>& vec)
+{
+    std::cout << "[";
+    for (int i = 0; i < vec.size(); i++) {
+        std::cout << vec[i] << ", ";
+    }
+    std::cout << "]" << std::endl;
+}
+
 int main()
 {
     Vector<int> myVec;
@@ -9,18 +19,27 @@ int main()
     myVec.push_back(4);
     myVec.push_back(5);
 
-    for (int i = 0; i < myVec.size(); i++) {
-        std::cout << myVec[i] << std::endl;
-    }
+    print_vec(myVec);
 
     std::cout << "current size: " << myVec.size() << std::endl;
     std::cout << "current capacity: " << myVec.capacity() << std::endl;
 
     Vector<int> vec2 = myVec;
 
-    for (int i = 0; i < vec2.size(); i++) {
-        std::cout << vec2[i] << std::endl;
-    }
+    print_vec(vec2);
+
+    Vector<int> vec3;
+    vec3.push_back(2);
+    vec3.push_back(3);
+    vec3.push_back(4);
+    vec3.push_back(5);
+    vec3.push_back(6);
+
+    Vector<int> vec4;
+    vec4 = vec3;
+
+    print_vec(vec3);
+    print_vec(vec4);
 
     return 0;
 }
