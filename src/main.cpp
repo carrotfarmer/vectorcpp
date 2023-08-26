@@ -45,8 +45,14 @@ int main()
 
     std::cout << vec4.at(2) << std::endl;
 
+    Vector<int> vec5 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    vec5.push_back(17);
+    vec5.push_back(19);
+    vec5.pop_back();
+    print_vec(vec5);
+
     // should error
-    std::cout << vec4.at(7) << std::endl;
+    // std::cout << vec4.at(7) << std::endl;
 
     return 0;
 }

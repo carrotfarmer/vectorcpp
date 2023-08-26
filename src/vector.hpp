@@ -1,19 +1,29 @@
 #pragma once
 
+#include <initializer_list>
 #include <iostream>
 #include <optional>
 #include <stdexcept>
 
-#include <stddef.h>
+#include <cstddef>
 
 #include "./iter.hpp"
 
 template <typename T>
 class Vector {
 public:
-    Vector()
-    {
+    Vector() {
         m_data = new T[m_capacity];
+    }
+
+    Vector(std::initializer_list<T> list) {
+        m_capacity = list.size();
+        m_size = 0;
+        m_data = new T[m_capacity];
+
+        for (const T& elem : list) {
+            push_back(elem);
+        }
     }
 
     ~Vector()
@@ -30,9 +40,8 @@ public:
         m_capacity = other.capacity();
         m_data = new T[m_capacity];
 
-        for (int i = 0; i < other.size(); i++) {
+        for (int i = 0; i < other.size(); i++)
             m_data[i] = other.m_data[i];
-        }
     }
 
     void push_back(T element)
@@ -40,7 +49,7 @@ public:
         if (m_size >= m_capacity) {
             T* newData = new T[m_capacity * 2];
 
-            for (int i = 0; i > m_size; i++) {
+            for (int i = 0; i < m_size; i++) {
                 newData[i] = m_data[i];
             }
 
@@ -111,12 +120,12 @@ public:
         return Iterator(m_data + m_size);
     }
 
-    size_t size() const
+    [[nodiscard]] size_t size() const
     {
         return m_size;
     }
 
-    size_t capacity() const
+    [[nodiscard]] size_t capacity() const
     {
         return m_capacity;
     }
