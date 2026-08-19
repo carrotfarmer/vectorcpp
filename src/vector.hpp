@@ -1,24 +1,23 @@
 #pragma once
 
-#include <initializer_list>
-#include <iostream>
-#include <optional>
-#include <stdexcept>
-
+#include <algorithm>
 #include <cstddef>
+#include <initializer_list>
+#include <stdexcept>
 
 #include "./iter.hpp"
 
 template <typename T>
 class Vector {
 public:
-    Vector() {
+    Vector()
+    {
         m_data = new T[m_capacity];
     }
 
-    Vector(std::initializer_list<T> list) {
-        m_capacity = list.size();
-        m_size = 0;
+    Vector(std::initializer_list<T> list)
+    {
+        m_capacity = std::max(list.size(), size_t { 1 });
         m_data = new T[m_capacity];
 
         for (const T& elem : list) {
@@ -29,84 +28,90 @@ public:
     ~Vector()
     {
         delete[] m_data;
-        m_capacity = 8;
-        m_size = 0;
     }
 
-    // copy constructor to deep copy
-    Vector(Vector& other)
+    Vector(const Vector& other)
     {
-        m_size = other.size();
-        m_capacity = other.capacity();
+        m_size = other.m_size;
+        m_capacity = other.m_capacity;
         m_data = new T[m_capacity];
 
-        for (int i = 0; i < other.size(); i++)
+        for (size_t i = 0; i < m_size; ++i) {
             m_data[i] = other.m_data[i];
+        }
+    }
+
+    Vector& operator=(const Vector& other)
+    {
+        if (this == &other) {
+            return *this;
+        }
+
+        T* new_data = new T[other.m_capacity];
+        for (size_t i = 0; i < other.m_size; ++i) {
+            new_data[i] = other.m_data[i];
+        }
+
+        delete[] m_data;
+        m_data = new_data;
+        m_size = other.m_size;
+        m_capacity = other.m_capacity;
+        return *this;
     }
 
     void push_back(T element)
     {
         if (m_size >= m_capacity) {
-            T* newData = new T[m_capacity * 2];
+            const size_t new_capacity = m_capacity == 0 ? 1 : m_capacity * 2;
+            T* new_data = new T[new_capacity];
 
-            for (int i = 0; i < m_size; i++) {
-                newData[i] = m_data[i];
+            for (size_t i = 0; i < m_size; ++i) {
+                new_data[i] = m_data[i];
             }
 
-            m_capacity += m_capacity;
-            m_data = newData;
+            delete[] m_data;
+            m_data = new_data;
+            m_capacity = new_capacity;
         }
 
         m_data[m_size] = element;
-        m_size++;
+        ++m_size;
     }
 
     void pop_back()
     {
-        if (m_size > 0) {
-            m_size--;
+        if (m_size == 0) {
+            return;
+        }
 
-            // dealloc if size is 1/4th of capacity
-            if (m_capacity > 4 * m_size) {
-                m_capacity = m_size;
-                T* newData = new T[m_capacity];
+        --m_size;
+        if (m_capacity > 4 * m_size) {
+            const size_t new_capacity = std::max(m_size, size_t { 1 });
+            T* new_data = new T[new_capacity];
 
-                for (int i = 0; i < m_size; i++) {
-                    newData[i] = m_data[i];
-                }
-
-                delete m_data;
-                m_data = newData;
+            for (size_t i = 0; i < m_size; ++i) {
+                new_data[i] = m_data[i];
             }
+
+            delete[] m_data;
+            m_data = new_data;
+            m_capacity = new_capacity;
         }
     }
 
     T& operator[](size_t index) const
     {
-        if (index > m_size) {
+        if (index >= m_size) {
             throw std::out_of_range("ERR: index out of bounds!");
         }
-
         return m_data[index];
-    }
-
-    void operator=(Vector<T>& other)
-    {
-        m_capacity = other.capacity();
-        m_size = other.size();
-        m_data = new T[m_capacity];
-
-        for (int i = 0; i < other.size(); i++) {
-            m_data[i] = other.m_data[i];
-        }
     }
 
     T& at(size_t index) const
     {
-        if (index > m_size) {
+        if (index >= m_size) {
             throw std::out_of_range("ERR: index out of bounds!");
         }
-
         return m_data[index];
     }
 
